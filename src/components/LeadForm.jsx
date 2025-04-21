@@ -34,17 +34,21 @@ const LeadForm = ({ setLeads }) => {
   const onSubmit = async (values, { resetForm, setSubmitting }) => {
     try {
       const response = await createLead(values);
-
+      
       setLeads(prev => [...prev, response.data]);
       toast.success('Lead submitted successfully!');
       resetForm();
-
     } catch (error) {
-      toast.error('Failed to submit lead. Please try again.');
+      if (error.response && error.response.data && error.response.data.errors) {
+        
+        const errorMessage = error.response.data.errors[0]?.errorMessage || 'Failed to submit lead. Please try again.';
+        toast.error(errorMessage);
+      } else {
+        toast.error('Failed to submit lead. Please try again.');
+      }
     }
     setSubmitting(false);
-  };
-
+  };  
 
   return (
     <div>
