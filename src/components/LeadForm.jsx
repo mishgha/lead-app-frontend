@@ -26,7 +26,10 @@ const LeadForm = ({ setLeads }) => {
   const validationSchema = Yup.object({
     fullName: Yup.string().required('Full Name is required'),
     email: Yup.string().email('Invalid email format').required('Email is required'),
-    phoneNumber: Yup.string(),
+    phoneNumber: Yup.string()
+    .matches(/^[0-9]+$/, 'Phone Number must contain only digits')
+    .nullable()
+    .notRequired(),
     companyName: Yup.string(),
     notes: Yup.string(),
   });
@@ -78,6 +81,9 @@ const LeadForm = ({ setLeads }) => {
             <div>
               <label>Phone Number</label><br />
               <Field type="text" name="phoneNumber" />
+              <div className="error-message">
+                <ErrorMessage name="phoneNumber" component="div" />
+              </div>
             </div>
 
             <div>
